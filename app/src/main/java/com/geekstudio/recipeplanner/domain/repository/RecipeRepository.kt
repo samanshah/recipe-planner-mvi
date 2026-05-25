@@ -1,11 +1,20 @@
 package com.geekstudio.recipeplanner.domain.repository
 
 import com.geekstudio.recipeplanner.domain.model.Recipe
+import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
 
-    suspend fun searchRecipes(
+    fun observeRecipes(
         query: String
-    ): List<Recipe>
+    ): Flow<List<Recipe>>
+
+    suspend fun refreshRecipes(
+        query: String
+    )
+
+    suspend fun toggleFavorite(
+        recipeId: String
+    )
 
 }

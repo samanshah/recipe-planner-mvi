@@ -31,6 +31,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         observeSearch()
+        observeRecipes("")
     }
 
     fun onIntent(
@@ -68,8 +69,35 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeIntent.ToggleFavorite -> {
+                viewModelScope.launch {
 
+                    repository.toggleFavorite(
+                        intent.recipeId
+                    )
+
+                }
             }
+
+        }
+
+    }
+
+    private fun observeRecipes(
+        query: String
+    ) {
+
+        viewModelScope.launch {
+
+            repository.observeRecipes(query)
+                .collectLatest { recipes ->
+
+                    reduce(
+                        HomePartialState.RecipesLoaded(
+                            recipes
+                        )
+                    )
+
+                }
 
         }
 
@@ -114,14 +142,7 @@ class HomeViewModel @Inject constructor(
 
             try {
 
-                val recipes =
-                    repository.searchRecipes(query)
-
-                reduce(
-                    HomePartialState.RecipesLoaded(
-                        recipes
-                    )
-                )
+                repository.refreshRecipes(query)
 
             } catch (e: Exception) {
 

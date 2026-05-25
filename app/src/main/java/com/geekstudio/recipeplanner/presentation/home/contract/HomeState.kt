@@ -10,6 +10,8 @@ data class HomeState(
 
     val searchQuery: String = "",
 
-    val error: String? = null
+    val error: String? = null,
+
+    val isOfflineMode: Boolean = false
 
 )
