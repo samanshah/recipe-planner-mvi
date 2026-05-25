@@ -1,25 +1,54 @@
 package com.geekstudio.recipeplanner.presentation.home.reducer
 
+import com.geekstudio.recipeplanner.presentation.home.contract.HomePartialState
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeState
 
 object HomeReducer {
 
     fun reduce(
         currentState: HomeState,
-        newState: HomeState
+        partialState: HomePartialState
     ): HomeState {
 
-        return currentState.copy(
+        return when (partialState) {
 
-            isLoading = newState.isLoading,
+            is HomePartialState.Loading -> {
 
-            recipes = newState.recipes,
+                currentState.copy(
+                    isLoading = true,
+                    error = null
+                )
 
-            searchQuery = newState.searchQuery,
+            }
 
-            error = newState.error
+            is HomePartialState.RecipesLoaded -> {
 
-        )
+                currentState.copy(
+                    isLoading = false,
+                    recipes = partialState.recipes,
+                    error = null
+                )
+
+            }
+
+            is HomePartialState.Error -> {
+
+                currentState.copy(
+                    isLoading = false,
+                    error = partialState.message
+                )
+
+            }
+
+            is HomePartialState.QueryChanged -> {
+
+                currentState.copy(
+                    searchQuery = partialState.query
+                )
+
+            }
+
+        }
 
     }
 

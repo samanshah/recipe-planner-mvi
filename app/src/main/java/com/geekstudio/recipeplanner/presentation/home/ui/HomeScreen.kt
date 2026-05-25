@@ -1,11 +1,14 @@
 package com.geekstudio.recipeplanner.presentation.home.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.geekstudio.recipeplanner.presentation.home.contract.HomeEffect
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeIntent
 import com.geekstudio.recipeplanner.presentation.home.viewmodel.HomeViewModel
 
@@ -17,23 +20,82 @@ fun HomeScreen(
     val state by viewModel.state
         .collectAsStateWithLifecycle()
 
-    Column {
+    val snackbarHostState =
+        remember {
+            SnackbarHostState()
+        }
 
-        OutlinedTextField(
-            value = state.searchQuery,
-            onValueChange = {
+    LaunchedEffect(Unit) {
 
-                viewModel.onIntent(
-                    HomeIntent.SearchRecipes(it)
-                )
+        viewModel.effect.collect { effect ->
 
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
+            when (effect) {
 
-        Text(
-            text = "Recipes count: ${state.recipes.size}"
-        )
+                is HomeEffect.ShowSnackbar -> {
+
+                    snackbarHostState
+                        .showSnackbar(
+                            effect.message
+                        )
+
+                }
+
+                is HomeEffect.NavigateToDetail -> {
+
+                }
+
+            }
+
+        }
+
+    }
+
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
+        }
+    ) { paddingValues ->
+
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+        ) {
+
+            OutlinedTextField(
+                value = state.searchQuery,
+                onValueChange = {
+
+                    viewModel.onIntent(
+                        HomeIntent.SearchRecipes(it)
+                    )
+
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            if (state.isLoading) {
+
+                CircularProgressIndicator()
+
+            }
+
+            state.error?.let {
+
+                Text(text = it)
+
+            }
+
+            LazyColumn {
+
+                items(state.recipes) { recipe ->
+
+                    Text(recipe.title)
+
+                }
+
+            }
+
+        }
 
     }
 
