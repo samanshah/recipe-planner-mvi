@@ -3,18 +3,12 @@ package com.geekstudio.recipeplanner
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.geekstudio.recipeplanner.navigation.RecipeNavGraph
+import androidx.lifecycle.lifecycleScope
+import com.geekstudio.recipeplanner.core.ui.theme.RecipePlannerTheme
+import com.geekstudio.recipeplanner.data.preferences.DataStoreManager
 import com.geekstudio.recipeplanner.presentation.main.MainScreen
-import com.geekstudio.recipeplanner.ui.theme.RecipePlannerTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -22,9 +16,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContent {
-            RecipePlannerTheme {
-                MainScreen()
+        lifecycleScope.launch {
+            DataStoreManager(this@MainActivity).darkModeFlow.collect {
+                setContent {
+                    RecipePlannerTheme(darkTheme = it) {
+                        MainScreen()
+                    }
+                }
             }
         }
     }
