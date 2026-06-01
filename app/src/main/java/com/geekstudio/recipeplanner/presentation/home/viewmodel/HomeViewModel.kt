@@ -10,7 +10,13 @@ import com.geekstudio.recipeplanner.presentation.home.contract.HomeState
 import com.geekstudio.recipeplanner.presentation.home.reducer.HomeReducer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +29,7 @@ class HomeViewModel @Inject constructor(
 
     val state = _state.asStateFlow()
 
-    private val _effect = Channel<HomeEffect>()
+    private val _effect = Channel<HomeEffect>(Channel.BUFFERED)
 
     val effect = _effect.receiveAsFlow()
 
@@ -78,6 +84,14 @@ class HomeViewModel @Inject constructor(
                 }
             }
 
+            is HomeIntent.Retry -> {
+
+                searchRecipes(
+                    _state.value.lastQuery
+                )
+
+            }
+
         }
 
     }
@@ -88,16 +102,15 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            repository.observeRecipes(query)
-                .collectLatest { recipes ->
+            repository.observeRecipes(query).collectLatest { recipes ->
 
-                    reduce(
-                        HomePartialState.RecipesLoaded(
-                            recipes
-                        )
+                reduce(
+                    HomePartialState.RecipesLoaded(
+                        recipes
                     )
+                )
 
-                }
+            }
 
         }
 
@@ -107,24 +120,21 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            searchQuery
-                .debounce(500)
-                .distinctUntilChanged()
-                .collectLatest { query ->
+            searchQuery.debounce(500).distinctUntilChanged().collectLatest { query ->
 
-                    reduce(
-                        HomePartialState.QueryChanged(
-                            query
-                        )
+                reduce(
+                    HomePartialState.QueryChanged(
+                        query
                     )
+                )
 
-                    if (query.isNotBlank()) {
+                if (query.isNotBlank()) {
 
-                        searchRecipes(query)
-
-                    }
+                    searchRecipes(query)
 
                 }
+
+            }
 
         }
 
@@ -136,9 +146,7 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            reduce(
-                HomePartialState.Loading
-            )
+            reduce(HomePartialState.Loading)
 
             try {
 
@@ -148,9 +156,12 @@ class HomeViewModel @Inject constructor(
 
                 reduce(
                     HomePartialState.Error(
-                        e.message
-                            ?: "Unknown error"
+                        e.message ?: "Unknown error"
                     )
+                )
+
+                showError(
+                    e.message ?: "Unknown error"
                 )
 
             }
@@ -166,11 +177,22 @@ class HomeViewModel @Inject constructor(
         _state.update { currentState ->
 
             HomeReducer.reduce(
-                currentState,
-                partialState
+                currentState, partialState
             )
 
         }
+
+    }
+
+    private suspend fun showError(
+        message: String
+    ) {
+
+        _effect.send(
+            HomeEffect.ShowSnackbar(
+                message
+            )
+        )
 
     }
 

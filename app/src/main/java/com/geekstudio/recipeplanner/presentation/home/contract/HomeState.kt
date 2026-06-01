@@ -12,6 +12,10 @@ data class HomeState(
 
     val error: String? = null,
 
-    val isOfflineMode: Boolean = false
+    val isOfflineMode: Boolean = false,
+
+    val lastQuery: String = "",
+
+    val isConnected: Boolean = true
 
 )

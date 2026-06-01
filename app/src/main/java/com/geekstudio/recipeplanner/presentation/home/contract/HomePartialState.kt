@@ -18,4 +18,8 @@ sealed interface HomePartialState {
         val query: String
     ) : HomePartialState
 
+    data class ConnectivityChanged(
+        val connected: Boolean
+    ) : HomePartialState
+
 }

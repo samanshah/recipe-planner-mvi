@@ -6,8 +6,7 @@ import com.geekstudio.recipeplanner.presentation.home.contract.HomeState
 object HomeReducer {
 
     fun reduce(
-        currentState: HomeState,
-        partialState: HomePartialState
+        currentState: HomeState, partialState: HomePartialState
     ): HomeState {
 
         return when (partialState) {
@@ -15,8 +14,7 @@ object HomeReducer {
             is HomePartialState.Loading -> {
 
                 currentState.copy(
-                    isLoading = true,
-                    error = null
+                    isLoading = true, error = null
                 )
 
             }
@@ -24,9 +22,7 @@ object HomeReducer {
             is HomePartialState.RecipesLoaded -> {
 
                 currentState.copy(
-                    isLoading = false,
-                    recipes = partialState.recipes,
-                    error = null
+                    isLoading = false, recipes = partialState.recipes, error = null
                 )
 
             }
@@ -34,8 +30,7 @@ object HomeReducer {
             is HomePartialState.Error -> {
 
                 currentState.copy(
-                    isLoading = false,
-                    error = partialState.message
+                    isLoading = false, error = partialState.message
                 )
 
             }
@@ -43,7 +38,15 @@ object HomeReducer {
             is HomePartialState.QueryChanged -> {
 
                 currentState.copy(
-                    searchQuery = partialState.query
+                    searchQuery = partialState.query, lastQuery = partialState.query
+                )
+
+            }
+
+            is HomePartialState.ConnectivityChanged -> {
+
+                currentState.copy(
+                    isConnected = partialState.connected
                 )
 
             }

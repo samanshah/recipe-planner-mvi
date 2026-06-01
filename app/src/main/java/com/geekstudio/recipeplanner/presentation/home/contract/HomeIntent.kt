@@ -16,4 +16,6 @@ sealed interface HomeIntent {
         val recipeId: String
     ) : HomeIntent
 
+    data object Retry : HomeIntent
+
 }

@@ -10,4 +10,6 @@ sealed interface HomeEffect {
         val message: String
     ) : HomeEffect
 
+    data object ScrollToTop : HomeEffect
+
 }
