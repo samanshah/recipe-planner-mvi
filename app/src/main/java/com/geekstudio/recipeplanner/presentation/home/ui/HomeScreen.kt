@@ -20,6 +20,18 @@ fun HomeScreen(
     val state by viewModel.state
         .collectAsStateWithLifecycle()
 
+//    val pullRefreshState =
+//        rememberPullRefreshState(
+//            refreshing = state.isLoading,
+//            onRefresh = {
+//
+//                viewModel.onIntent(
+//                    HomeIntent.Refresh
+//                )
+//
+//            }
+//        )
+
     val snackbarHostState =
         remember {
             SnackbarHostState()
