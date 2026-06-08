@@ -3,14 +3,12 @@ package com.geekstudio.recipeplanner.data.local.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "recipes")
-data class RecipeEntity(
+@Entity(
+    tableName = "favorite_recipes"
+)
+data class FavoriteRecipeEntity(
 
     @PrimaryKey
-    val id: String,
-
-    val title: String,
-
-    val imageUrl: String,
+    val recipeId: String
 
 )

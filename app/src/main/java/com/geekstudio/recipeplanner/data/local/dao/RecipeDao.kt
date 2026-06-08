@@ -28,27 +28,6 @@ interface RecipeDao {
 
     @Query(
         """
-        UPDATE recipes
-        SET isFavorite = NOT isFavorite
-        WHERE id = :recipeId
-        """
-    )
-    suspend fun toggleFavorite(
-        recipeId: String
-    )
-
-    @Query(
-        """
-        SELECT *
-        FROM recipes
-        WHERE isFavorite = 1
-        ORDER BY title ASC
-        """
-    )
-    fun observeFavorites(): Flow<List<RecipeEntity>>
-
-    @Query(
-        """
         DELETE FROM recipes
         """
     )

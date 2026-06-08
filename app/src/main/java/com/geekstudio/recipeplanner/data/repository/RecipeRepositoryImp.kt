@@ -65,7 +65,7 @@ class RecipeRepositoryImpl @Inject constructor(
         recipeId: String
     ) {
 
-        recipeDao.toggleFavorite(recipeId)
+//        recipeDao.toggleFavorite(recipeId)
 
     }
 
