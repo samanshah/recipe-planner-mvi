@@ -22,4 +22,8 @@ sealed interface HomePartialState {
         val connected: Boolean
     ) : HomePartialState
 
+    data class SearchHintChanged(
+        val visible: Boolean
+    ) : HomePartialState
+
 }

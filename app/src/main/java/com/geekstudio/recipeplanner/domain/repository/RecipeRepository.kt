@@ -5,9 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
 
-    fun observeRecipes(
-        query: String
-    ): Flow<List<Recipe>>
+    fun observeRecipes(): Flow<List<Recipe>>
 
     suspend fun refreshRecipes(
         query: String

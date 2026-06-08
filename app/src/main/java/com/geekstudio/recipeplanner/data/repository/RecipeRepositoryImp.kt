@@ -19,11 +19,10 @@ class RecipeRepositoryImpl @Inject constructor(
     private val searchHistoryDao: SearchHistoryDao
 ) : RecipeRepository {
 
-    override fun observeRecipes(
-        query: String
-    ): Flow<List<Recipe>> {
-
-        return recipeDao.observeRecipes(query).map { entities ->
+    override fun observeRecipes(): Flow<List<Recipe>> {
+        return recipeDao
+            .observeRecipes()
+            .map { entities ->
 
                 entities.map {
                     it.toDomain()
@@ -42,6 +41,8 @@ class RecipeRepositoryImpl @Inject constructor(
                 dto.toDomain()
 
             } ?: emptyList()
+
+        recipeDao.clearRecipes()
 
         recipeDao.insertRecipes(
             recipes.map {

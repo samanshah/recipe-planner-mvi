@@ -51,6 +51,14 @@ object HomeReducer {
 
             }
 
+            is HomePartialState.SearchHintChanged -> {
+
+                currentState.copy(
+                    showSearchHint = partialState.visible
+                )
+
+            }
+
         }
 
     }

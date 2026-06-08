@@ -27,7 +27,9 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "recipe_database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
 
     }
 

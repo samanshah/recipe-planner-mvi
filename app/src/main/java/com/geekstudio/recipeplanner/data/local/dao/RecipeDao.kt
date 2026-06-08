@@ -12,13 +12,12 @@ interface RecipeDao {
 
     @Query(
         """
-        SELECT * FROM recipes
-        WHERE title LIKE '%' || :query || '%'
-    """
+        SELECT *
+        FROM recipes
+        ORDER BY title ASC
+        """
     )
-    fun observeRecipes(
-        query: String
-    ): Flow<List<RecipeEntity>>
+    fun observeRecipes(): Flow<List<RecipeEntity>>
 
     @Insert(
         onConflict = OnConflictStrategy.REPLACE
@@ -32,7 +31,7 @@ interface RecipeDao {
         UPDATE recipes
         SET isFavorite = NOT isFavorite
         WHERE id = :recipeId
-    """
+        """
     )
     suspend fun toggleFavorite(
         recipeId: String
@@ -40,10 +39,19 @@ interface RecipeDao {
 
     @Query(
         """
-        SELECT * FROM recipes
+        SELECT *
+        FROM recipes
         WHERE isFavorite = 1
-    """
+        ORDER BY title ASC
+        """
     )
     fun observeFavorites(): Flow<List<RecipeEntity>>
+
+    @Query(
+        """
+        DELETE FROM recipes
+        """
+    )
+    suspend fun clearRecipes()
 
 }

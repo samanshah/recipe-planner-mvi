@@ -37,7 +37,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         observeSearch()
-        observeRecipes("")
+        observeRecipes()
     }
 
     fun onIntent(
@@ -54,10 +54,6 @@ class HomeViewModel @Inject constructor(
                     HomePartialState.QueryChanged(
                         intent.query
                     )
-                )
-
-                searchRecipes(
-                    intent.query
                 )
 
             }
@@ -106,21 +102,20 @@ class HomeViewModel @Inject constructor(
 
     }
 
-    private fun observeRecipes(
-        query: String
-    ) {
+    private fun observeRecipes() {
 
         viewModelScope.launch {
 
-            repository.observeRecipes(query).collectLatest { recipes ->
+            repository
+                .observeRecipes()
+                .collectLatest { recipes ->
 
-                reduce(
-                    HomePartialState.RecipesLoaded(
-                        recipes
+                    reduce(
+                        HomePartialState
+                            .RecipesLoaded(recipes)
                     )
-                )
 
-            }
+                }
 
         }
 
@@ -138,11 +133,24 @@ class HomeViewModel @Inject constructor(
                     )
                 )
 
-                if (query.isNotBlank()) {
+                if (query.isBlank()) {
 
-                    searchRecipes(query)
+                    reduce(
+                        HomePartialState.SearchHintChanged(
+                            true
+                        )
+                    )
 
+                    return@collectLatest
                 }
+
+                reduce(
+                    HomePartialState.SearchHintChanged(
+                        false
+                    )
+                )
+
+                searchRecipes(query)
 
             }
 
@@ -176,6 +184,13 @@ class HomeViewModel @Inject constructor(
 
             }
 
+            _state.update {
+
+                it.copy(
+                    lastQuery = query
+                )
+
+            }
         }
 
     }

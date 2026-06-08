@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.geekstudio.recipeplanner.core.ui.components.EmptyState
 import com.geekstudio.recipeplanner.core.ui.components.ErrorView
+import com.geekstudio.recipeplanner.core.ui.components.SearchHintView
 import com.geekstudio.recipeplanner.core.ui.loading.RecipeSkeleton
 import com.geekstudio.recipeplanner.presentation.home.component.RecipeCard
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeEffect
@@ -138,6 +139,12 @@ fun HomeScreen(
 
                         }
                     )
+                }
+
+                state.showSearchHint -> {
+
+                    SearchHintView()
+
                 }
 
                 state.recipes.isEmpty() -> {

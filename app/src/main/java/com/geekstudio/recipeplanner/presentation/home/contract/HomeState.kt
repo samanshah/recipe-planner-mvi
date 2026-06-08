@@ -16,6 +16,9 @@ data class HomeState(
 
     val lastQuery: String = "",
 
-    val isConnected: Boolean = true
+    val isConnected: Boolean = true,
+
+    val showSearchHint: Boolean = true
+
 
 )
