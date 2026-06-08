@@ -5,6 +5,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.geekstudio.recipeplanner.core.ui.spacing.AppSpacing
 import com.valentinilk.shimmer.shimmer
 
 @Composable
@@ -18,7 +19,7 @@ fun RecipeSkeleton() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp)
-                    .padding(8.dp)
+                    .padding(AppSpacing.Small)
                     .shimmer()
             ) {}
 

@@ -21,6 +21,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.geekstudio.recipeplanner.core.ui.components.EmptyState
+import com.geekstudio.recipeplanner.core.ui.components.ErrorView
+import com.geekstudio.recipeplanner.core.ui.loading.RecipeSkeleton
 import com.geekstudio.recipeplanner.presentation.home.component.RecipeCard
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeEffect
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeIntent
@@ -53,33 +56,33 @@ fun HomeScreen(
 
     val listState = rememberLazyListState()
 
-    LaunchedEffect(Unit) {
-
-        viewModel.effect.collect { effect ->
-
-            when (effect) {
-
-                is HomeEffect.ShowSnackbar -> {
-
-                    snackbarHostState
-                        .showSnackbar(
-                            effect.message
-                        )
-
-                }
-
-                is HomeEffect.NavigateToDetail -> {
-
-                }
-
-                is HomeEffect.ScrollToTop -> {
-                    listState.animateScrollToItem(0)
-                }
-            }
-
-        }
-
-    }
+//    LaunchedEffect(Unit) {
+//
+//        viewModel.effect.collect { effect ->
+//
+//            when (effect) {
+//
+//                is HomeEffect.ShowSnackbar -> {
+//
+//                    snackbarHostState
+//                        .showSnackbar(
+//                            effect.message
+//                        )
+//
+//                }
+//
+//                is HomeEffect.NavigateToDetail -> {
+//
+//                }
+//
+//                is HomeEffect.ScrollToTop -> {
+//                    listState.animateScrollToItem(0)
+//                }
+//            }
+//
+//        }
+//
+//    }
 
     Scaffold(
         snackbarHost = {
@@ -109,42 +112,68 @@ fun HomeScreen(
             OutlinedTextField(
                 value = state.searchQuery,
                 onValueChange = {
-
                     viewModel.onIntent(
                         HomeIntent.SearchRecipes(it)
                     )
-
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                label = {
+                    Text("Search")
+                }
             )
 
-            if (state.isLoading) {
+            when {
+                state.isLoading -> {
+                    RecipeSkeleton()
+                }
 
-                CircularProgressIndicator()
+                state.error != null -> {
+                    ErrorView(
+                        message = state.error ?: "",
+                        onRetry = {
 
-            }
-
-            state.error?.let {
-
-                Text(text = it)
-
-            }
-
-            LazyColumn {
-
-                items(state.recipes) { recipe ->
-
-                    RecipeCard(
-                        recipe,
-                        onClick = {
-
-                        },
-                        onFavoriteClick = {
+                            viewModel.onIntent(
+                                HomeIntent.Retry
+                            )
 
                         }
                     )
                 }
 
+                state.recipes.isEmpty() -> {
+
+                    EmptyState(
+                        message = "No Recipes Found"
+                    )
+
+                }
+
+                else -> {
+                    LazyColumn {
+
+                        items(state.recipes) { recipe ->
+
+                            RecipeCard(
+                                recipe,
+                                onClick = {
+                                    viewModel.onIntent(
+                                        HomeIntent.RecipeClicked(
+                                            recipe.id
+                                        )
+                                    )
+                                },
+                                onFavoriteClick = {
+                                    viewModel.onIntent(
+                                        HomeIntent.ToggleFavorite(
+                                            recipe.id
+                                        )
+                                    )
+                                }
+                            )
+                        }
+
+                    }
+                }
             }
 
         }

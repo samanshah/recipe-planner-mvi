@@ -1,26 +1,29 @@
-package com.geekstudio.recipeplanner.domain.repository
+package com.geekstudio.recipeplanner.data.repository
 
 import com.geekstudio.recipeplanner.data.local.dao.RecipeDao
+import com.geekstudio.recipeplanner.data.local.dao.SearchHistoryDao
+import com.geekstudio.recipeplanner.data.local.entity.SearchHistoryEntity
 import com.geekstudio.recipeplanner.data.local.mapper.toDomain
 import com.geekstudio.recipeplanner.data.local.mapper.toEntity
 import com.geekstudio.recipeplanner.data.remote.api.RecipeApi
 import com.geekstudio.recipeplanner.data.remote.mapper.toDomain
 import com.geekstudio.recipeplanner.domain.model.Recipe
+import com.geekstudio.recipeplanner.domain.repository.RecipeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(
     private val api: RecipeApi,
-    private val dao: RecipeDao
+    private val recipeDao: RecipeDao,
+    private val searchHistoryDao: SearchHistoryDao
 ) : RecipeRepository {
 
     override fun observeRecipes(
         query: String
     ): Flow<List<Recipe>> {
 
-        return dao.observeRecipes(query)
-            .map { entities ->
+        return recipeDao.observeRecipes(query).map { entities ->
 
                 entities.map {
                     it.toDomain()
@@ -34,21 +37,26 @@ class RecipeRepositoryImpl @Inject constructor(
         query: String
     ) {
 
-        val recipes =
-            api.searchRecipes(query)
-                .meals
-                ?.map { dto ->
+        val recipes = api.searchRecipes(query).meals?.map { dto ->
 
-                    dto.toDomain()
+                dto.toDomain()
 
-                }
-                ?: emptyList()
+            } ?: emptyList()
 
-        dao.insertRecipes(
+        recipeDao.insertRecipes(
             recipes.map {
                 it.toEntity()
-            }
-        )
+            })
+
+        if (query.isNotBlank()) {
+
+            searchHistoryDao.insertSearchQuery(
+                SearchHistoryEntity(
+                    query = query
+                )
+            )
+
+        }
 
     }
 
@@ -56,7 +64,7 @@ class RecipeRepositoryImpl @Inject constructor(
         recipeId: String
     ) {
 
-        dao.toggleFavorite(recipeId)
+        recipeDao.toggleFavorite(recipeId)
 
     }
 

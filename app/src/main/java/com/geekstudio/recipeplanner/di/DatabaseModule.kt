@@ -4,6 +4,7 @@ import kotlin.jvm.java
 import android.content.Context
 import androidx.room.Room
 import com.geekstudio.recipeplanner.data.local.dao.RecipeDao
+import com.geekstudio.recipeplanner.data.local.dao.SearchHistoryDao
 import com.geekstudio.recipeplanner.data.local.database.AppDatabase
 import dagger.Module
 import dagger.Provides
@@ -37,6 +38,16 @@ object DatabaseModule {
     ): RecipeDao {
 
         return database.recipeDao()
+
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchHistoryDao(
+        database: AppDatabase
+    ): SearchHistoryDao {
+
+        return database.searchHistoryDao()
 
     }
 

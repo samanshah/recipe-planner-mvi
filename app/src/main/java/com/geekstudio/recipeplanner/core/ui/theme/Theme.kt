@@ -4,6 +4,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import com.geekstudio.recipeplanner.core.ui.colors.BackgroundDark
+import com.geekstudio.recipeplanner.core.ui.colors.Primary
+import com.geekstudio.recipeplanner.core.ui.colors.Secondary
 import com.geekstudio.recipeplanner.core.ui.typography.AppTypography
 
 @Composable
@@ -16,9 +19,9 @@ fun RecipePlannerTheme(
 
         colorScheme =
             if (darkTheme)
-                darkColorScheme()
+                DarkColors
             else
-                lightColorScheme(),
+                LightColors,
 
         typography = AppTypography,
 
@@ -27,3 +30,16 @@ fun RecipePlannerTheme(
     )
 
 }
+
+private val LightColors =
+    lightColorScheme(
+        primary = Primary,
+        secondary = Secondary
+    )
+
+private val DarkColors =
+    darkColorScheme(
+        primary = Primary,
+        secondary = Secondary,
+        background = BackgroundDark
+    )

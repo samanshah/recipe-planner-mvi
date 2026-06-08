@@ -1,16 +1,21 @@
 package com.geekstudio.recipeplanner.data.local.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.geekstudio.recipeplanner.data.local.entity.RecipeEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RecipeDao {
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM recipes
         WHERE title LIKE '%' || :query || '%'
-    """)
+    """
+    )
     fun observeRecipes(
         query: String
     ): Flow<List<RecipeEntity>>
@@ -22,20 +27,23 @@ interface RecipeDao {
         recipes: List<RecipeEntity>
     )
 
-    @Query("""
+    @Query(
+        """
         UPDATE recipes
         SET isFavorite = NOT isFavorite
         WHERE id = :recipeId
-    """)
+    """
+    )
     suspend fun toggleFavorite(
         recipeId: String
     )
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM recipes
         WHERE isFavorite = 1
-    """)
-    fun observeFavorites():
-            Flow<List<RecipeEntity>>
+    """
+    )
+    fun observeFavorites(): Flow<List<RecipeEntity>>
 
 }

@@ -5,15 +5,21 @@ import com.geekstudio.recipeplanner.data.local.entity.RecipeEntity
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.geekstudio.recipeplanner.data.local.dao.SearchHistoryDao
+import com.geekstudio.recipeplanner.data.local.entity.SearchHistoryEntity
 
 @Database(
     entities = [
-        RecipeEntity::class
+        RecipeEntity::class,
+        SearchHistoryEntity::class
     ],
-    version = 1
+    version = 2,
+    exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun recipeDao(): RecipeDao
+
+    abstract fun searchHistoryDao(): SearchHistoryDao
 
 }

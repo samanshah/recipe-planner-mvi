@@ -50,6 +50,16 @@ class HomeViewModel @Inject constructor(
 
                 searchQuery.value = intent.query
 
+                reduce(
+                    HomePartialState.QueryChanged(
+                        intent.query
+                    )
+                )
+
+                searchRecipes(
+                    intent.query
+                )
+
             }
 
             is HomeIntent.Refresh -> {
