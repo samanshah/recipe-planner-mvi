@@ -6,6 +6,8 @@ data class FavoritesState(
 
     val isLoading: Boolean = false,
 
-    val recipes: List<Recipe> = emptyList()
+    val recipes: List<Recipe> = emptyList(),
+
+    val error: String? = null
 
 )
