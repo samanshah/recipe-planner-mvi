@@ -8,7 +8,10 @@ fun RecipeEntity.toDomain(): Recipe {
     return Recipe(
         id = id,
         title = title,
-        imageUrl = imageUrl
+        imageUrl = imageUrl,
+        isFavorite = isFavorite,
+        category = category,
+        instructions = instructions
     )
 
 }
@@ -18,7 +21,10 @@ fun Recipe.toEntity(): RecipeEntity {
     return RecipeEntity(
         id = id,
         title = title,
-        imageUrl = imageUrl
+        imageUrl = imageUrl,
+        isFavorite = isFavorite,
+        category = category,
+        instructions = instructions
     )
 
 }

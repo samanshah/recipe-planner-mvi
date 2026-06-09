@@ -13,6 +13,12 @@ data class RecipeDto(
     val title: String,
 
     @SerialName("strMealThumb")
-    val imageUrl: String
+    val imageUrl: String,
 
+    @SerialName("isFavorite")
+    val isFavorite: Boolean = false,
+    @SerialName("category")
+    val category: String,
+    @SerialName("instructions")
+    val instructions: String,
 )

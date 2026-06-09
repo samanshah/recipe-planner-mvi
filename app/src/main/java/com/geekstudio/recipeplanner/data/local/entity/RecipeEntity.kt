@@ -13,4 +13,9 @@ data class RecipeEntity(
 
     val imageUrl: String,
 
+    val category: String,
+
+    val instructions: String,
+
+    val isFavorite: Boolean
 )

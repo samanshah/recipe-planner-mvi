@@ -1,7 +1,7 @@
 package com.geekstudio.recipeplanner.presentation.favorites.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.geekstudio.recipeplanner.domain.repository.FavoriteRepository
+import com.geekstudio.recipeplanner.domain.repository.RecipeRepository
 import com.geekstudio.recipeplanner.presentation.favorites.contract.FavoritesState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,9 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
-
-    private val favoriteRepository: FavoriteRepository
-
+    private val repository: RecipeRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(

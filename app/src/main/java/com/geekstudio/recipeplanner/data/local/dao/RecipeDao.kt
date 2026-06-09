@@ -33,4 +33,26 @@ interface RecipeDao {
     )
     suspend fun clearRecipes()
 
+    @Query(
+        """
+    SELECT *
+    FROM recipes
+    WHERE isFavorite = 1
+    ORDER BY title
+    """
+    )
+    fun observeFavorites(): Flow<List<RecipeEntity>>
+
+    @Query(
+        """
+    SELECT *
+    FROM recipes
+    WHERE id = :recipeId
+    LIMIT 1
+    """
+    )
+    suspend fun getRecipeById(
+        recipeId: String
+    ): RecipeEntity?
+
 }

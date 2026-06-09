@@ -2,7 +2,6 @@ package com.geekstudio.recipeplanner.presentation.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.geekstudio.recipeplanner.domain.repository.FavoriteRepository
 import com.geekstudio.recipeplanner.domain.repository.RecipeRepository
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeEffect
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeIntent
@@ -23,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: RecipeRepository, private val favoriteRepository: FavoriteRepository
+    private val repository: RecipeRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
@@ -213,15 +212,7 @@ class HomeViewModel @Inject constructor(
         recipeId: String
     ) {
 
-        viewModelScope.launch {
-
-            if (favoriteRepository.isFavorite(recipeId)) {
-                favoriteRepository.removeFavorite(recipeId)
-            } else {
-                favoriteRepository.addFavorite(recipeId)
-            }
-
-        }
+        //todo
 
     }
 
