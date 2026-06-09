@@ -155,6 +155,10 @@ class HomeViewModel @Inject constructor(
 
             try {
 
+                _effect.send(
+                    HomeEffect.ScrollToTop
+                )
+
                 repository.refreshRecipes(query)
 
             } catch (e: Exception) {
