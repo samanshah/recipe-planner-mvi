@@ -1,0 +1,3 @@
+package com.geekstudio.recipeplanner.data.repository
+
+class RecipeRepositoryImplTest
