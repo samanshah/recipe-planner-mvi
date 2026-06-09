@@ -15,4 +15,8 @@ interface RecipeRepository {
         recipeId: String
     )
 
+    suspend fun getRecipeById(
+        recipeId: String
+    ): Recipe?
+
 }
