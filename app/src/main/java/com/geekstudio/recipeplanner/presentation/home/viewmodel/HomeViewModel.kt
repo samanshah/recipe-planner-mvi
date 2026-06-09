@@ -2,6 +2,7 @@ package com.geekstudio.recipeplanner.presentation.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.geekstudio.recipeplanner.domain.repository.FavoriteRepository
 import com.geekstudio.recipeplanner.domain.repository.RecipeRepository
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeEffect
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeIntent
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: RecipeRepository
+    private val repository: RecipeRepository, private val favoriteRepository: FavoriteRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
@@ -81,13 +82,9 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeIntent.ToggleFavorite -> {
-                viewModelScope.launch {
-
-                    repository.toggleFavorite(
-                        intent.recipeId
-                    )
-
-                }
+                toggleFavorite(
+                    intent.recipeId
+                )
             }
 
             is HomeIntent.Retry -> {
@@ -106,13 +103,10 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            repository
-                .observeRecipes()
-                .collectLatest { recipes ->
+            repository.observeRecipes().collectLatest { recipes ->
 
                     reduce(
-                        HomePartialState
-                            .RecipesLoaded(recipes)
+                        HomePartialState.RecipesLoaded(recipes)
                     )
 
                 }
@@ -218,6 +212,22 @@ class HomeViewModel @Inject constructor(
                 message
             )
         )
+
+    }
+
+    private fun toggleFavorite(
+        recipeId: String
+    ) {
+
+        viewModelScope.launch {
+
+            if (favoriteRepository.isFavorite(recipeId)) {
+                favoriteRepository.removeFavorite(recipeId)
+            } else {
+                favoriteRepository.addFavorite(recipeId)
+            }
+
+        }
 
     }
 

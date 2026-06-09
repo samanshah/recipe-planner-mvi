@@ -21,10 +21,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.geekstudio.recipeplanner.core.ui.components.EmptyState
 import com.geekstudio.recipeplanner.core.ui.components.ErrorView
 import com.geekstudio.recipeplanner.core.ui.components.SearchHintView
 import com.geekstudio.recipeplanner.core.ui.loading.RecipeSkeleton
+import com.geekstudio.recipeplanner.navigation.Screen
 import com.geekstudio.recipeplanner.presentation.home.component.RecipeCard
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeEffect
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeIntent
@@ -32,8 +34,9 @@ import com.geekstudio.recipeplanner.presentation.home.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
-) {
+    viewModel: HomeViewModel = hiltViewModel(),
+    navController: NavHostController,
+    ) {
 
     val state by viewModel.state
         .collectAsStateWithLifecycle()
@@ -57,33 +60,43 @@ fun HomeScreen(
 
     val listState = rememberLazyListState()
 
-//    LaunchedEffect(Unit) {
-//
-//        viewModel.effect.collect { effect ->
-//
-//            when (effect) {
-//
-//                is HomeEffect.ShowSnackbar -> {
-//
-//                    snackbarHostState
-//                        .showSnackbar(
-//                            effect.message
-//                        )
-//
-//                }
-//
-//                is HomeEffect.NavigateToDetail -> {
-//
-//                }
-//
-//                is HomeEffect.ScrollToTop -> {
-//                    listState.animateScrollToItem(0)
-//                }
-//            }
-//
-//        }
-//
-//    }
+    LaunchedEffect(Unit) {
+
+        viewModel.effect.collect { effect ->
+
+            when (effect) {
+
+                is HomeEffect.ShowSnackbar -> {
+
+                    snackbarHostState.showSnackbar(
+                        effect.message
+                    )
+
+                }
+
+                is HomeEffect.NavigateToDetail -> {
+
+                    navController.navigate(
+                        Screen.Detail.createRoute(
+                            effect.recipeId
+                        )
+                    )
+
+                }
+
+                HomeEffect.ScrollToTop -> {
+
+                    listState.animateScrollToItem(
+                        0
+                    )
+
+                }
+
+            }
+
+        }
+
+    }
 
     Scaffold(
         snackbarHost = {

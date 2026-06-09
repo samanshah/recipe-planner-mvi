@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.geekstudio.recipeplanner.presentation.detail.ui.RecipeDetailScreen
 import com.geekstudio.recipeplanner.presentation.favorites.ui.FavoritesScreen
 import com.geekstudio.recipeplanner.presentation.home.ui.HomeScreen
 import com.geekstudio.recipeplanner.presentation.settings.ui.SettingsScreen
@@ -19,7 +20,9 @@ fun RecipeNavGraph(navController: NavHostController, paddingValues: PaddingValue
 
         composable(Screen.Home.route) {
 
-            HomeScreen()
+            HomeScreen(
+                navController = navController
+            )
 
         }
 
@@ -32,6 +35,21 @@ fun RecipeNavGraph(navController: NavHostController, paddingValues: PaddingValue
         composable("settings") {
 
             SettingsScreen()
+
+        }
+
+        composable(
+            route = Screen.Detail.route
+        ) { backStackEntry ->
+
+            val recipeId =
+                backStackEntry.arguments
+                    ?.getString("recipeId")
+                    ?: ""
+
+            RecipeDetailScreen(
+                recipeId = recipeId
+            )
 
         }
 
