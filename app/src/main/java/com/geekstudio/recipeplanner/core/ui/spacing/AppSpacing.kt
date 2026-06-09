@@ -14,4 +14,8 @@ object AppSpacing {
 
     val ExtraLarge = 32.dp
 
+    val CardCornerRadius = 16.dp
+
+    val ButtonCornerRadius = 12.dp
+
 }
