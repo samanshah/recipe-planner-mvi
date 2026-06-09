@@ -18,7 +18,8 @@ data class HomeState(
 
     val isConnected: Boolean = true,
 
-    val showSearchHint: Boolean = true
+    val showSearchHint: Boolean = true,
 
+    val hasSearched: Boolean = false
 
 )

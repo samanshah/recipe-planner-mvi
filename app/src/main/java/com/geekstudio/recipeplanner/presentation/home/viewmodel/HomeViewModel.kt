@@ -155,6 +155,14 @@ class HomeViewModel @Inject constructor(
 
             try {
 
+                _state.update {
+
+                    it.copy(
+                        hasSearched = true
+                    )
+
+                }
+
                 _effect.send(
                     HomeEffect.ScrollToTop
                 )

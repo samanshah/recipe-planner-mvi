@@ -160,6 +160,13 @@ fun HomeScreen(
 
                 }
 
+                state.recipes.isEmpty() &&
+                state.hasSearched -> {
+                    EmptyState(
+                        "No Recipes Found"
+                    )
+                }
+
                 state.recipes.isEmpty() -> {
 
                     EmptyState(
