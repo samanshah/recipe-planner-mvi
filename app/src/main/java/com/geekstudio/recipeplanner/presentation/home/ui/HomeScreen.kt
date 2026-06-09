@@ -8,12 +8,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,6 +35,7 @@ import com.geekstudio.recipeplanner.presentation.home.contract.HomeEffect
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeIntent
 import com.geekstudio.recipeplanner.presentation.home.viewmodel.HomeViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
@@ -52,6 +56,8 @@ fun HomeScreen(
 //
 //            }
 //        )
+
+    val pullRefreshState = rememberPullToRefreshState()
 
     val snackbarHostState =
         remember {
@@ -176,29 +182,41 @@ fun HomeScreen(
                 }
 
                 else -> {
-                    LazyColumn {
+                    PullToRefreshBox(
+                        isRefreshing = state.isLoading,
+                        state = pullRefreshState,
+                        onRefresh = {
 
-                        items(state.recipes) { recipe ->
-
-                            RecipeCard(
-                                recipe,
-                                onClick = {
-                                    viewModel.onIntent(
-                                        HomeIntent.RecipeClicked(
-                                            recipe.id
-                                        )
-                                    )
-                                },
-                                onFavoriteClick = {
-                                    viewModel.onIntent(
-                                        HomeIntent.ToggleFavorite(
-                                            recipe.id
-                                        )
-                                    )
-                                }
+                            viewModel.onIntent(
+                                HomeIntent.Refresh
                             )
-                        }
 
+                        }
+                    ) {
+                        LazyColumn {
+
+                            items(state.recipes) { recipe ->
+
+                                RecipeCard(
+                                    recipe,
+                                    onClick = {
+                                        viewModel.onIntent(
+                                            HomeIntent.RecipeClicked(
+                                                recipe.id
+                                            )
+                                        )
+                                    },
+                                    onFavoriteClick = {
+                                        viewModel.onIntent(
+                                            HomeIntent.ToggleFavorite(
+                                                recipe.id
+                                            )
+                                        )
+                                    }
+                                )
+                            }
+
+                        }
                     }
                 }
             }
