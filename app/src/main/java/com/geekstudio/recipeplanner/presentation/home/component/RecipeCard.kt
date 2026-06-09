@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.geekstudio.recipeplanner.core.ui.colors.AppColors
 import com.geekstudio.recipeplanner.domain.model.Recipe
 
 @Composable
@@ -66,6 +67,7 @@ fun RecipeCard(
                         Icons.Filled.Favorite
                     else
                         Icons.Outlined.FavoriteBorder,
+                    tint = AppColors.Favorite,
                     contentDescription = null
                 )
 
