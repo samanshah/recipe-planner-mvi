@@ -121,12 +121,6 @@ class HomeViewModel @Inject constructor(
 
             searchQuery.debounce(500).distinctUntilChanged().collectLatest { query ->
 
-                reduce(
-                    HomePartialState.QueryChanged(
-                        query
-                    )
-                )
-
                 if (query.isBlank()) {
 
                     reduce(
