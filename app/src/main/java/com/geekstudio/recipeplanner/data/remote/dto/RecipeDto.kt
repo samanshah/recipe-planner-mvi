@@ -15,10 +15,4 @@ data class RecipeDto(
     @SerialName("strMealThumb")
     val imageUrl: String,
 
-    @SerialName("isFavorite")
-    val isFavorite: Boolean = false,
-    @SerialName("category")
-    val category: String,
-    @SerialName("instructions")
-    val instructions: String,
 )

@@ -211,8 +211,9 @@ class HomeViewModel @Inject constructor(
     private fun toggleFavorite(
         recipeId: String
     ) {
-
-        //todo
+        viewModelScope.launch {
+            repository.toggleFavorite(recipeId)
+        }
 
     }
 

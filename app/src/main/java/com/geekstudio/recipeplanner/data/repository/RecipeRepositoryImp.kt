@@ -65,12 +65,26 @@ class RecipeRepositoryImpl @Inject constructor(
         recipeId: String
     ) {
 
-//        recipeDao.toggleFavorite(recipeId)
+        recipeDao.toggleFavorite(recipeId)
 
     }
 
     override suspend fun getRecipeById(recipeId: String): Recipe? {
         return recipeDao.getRecipeById(recipeId)?.toDomain()
+    }
+
+    override fun observeFavorites(): Flow<List<Recipe>> {
+
+        return recipeDao
+            .observeFavorites()
+            .map { entities ->
+
+                entities.map {
+                    it.toDomain()
+                }
+
+            }
+
     }
 
 }

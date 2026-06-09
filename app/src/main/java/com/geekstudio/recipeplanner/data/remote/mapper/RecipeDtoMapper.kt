@@ -1,5 +1,6 @@
 package com.geekstudio.recipeplanner.data.remote.mapper
 
+import android.R.attr.category
 import com.geekstudio.recipeplanner.data.remote.dto.RecipeDto
 import com.geekstudio.recipeplanner.domain.model.Recipe
 
@@ -9,9 +10,9 @@ fun RecipeDto.toDomain(): Recipe {
         id = id,
         title = title,
         imageUrl = imageUrl,
-        category = category,
-        instructions = instructions,
-        isFavorite = isFavorite
+        category = "",
+        instructions = "",
+        isFavorite = false
     )
 
 }

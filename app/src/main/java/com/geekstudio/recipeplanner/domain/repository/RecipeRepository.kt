@@ -19,4 +19,6 @@ interface RecipeRepository {
         recipeId: String
     ): Recipe?
 
+    fun observeFavorites(): Flow<List<Recipe>>
+
 }

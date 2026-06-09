@@ -28,7 +28,17 @@ fun RecipeNavGraph(navController: NavHostController, paddingValues: PaddingValue
 
         composable("favorites") {
 
-            FavoritesScreen()
+            FavoritesScreen(
+                onNavigateToDetail = { recipeId ->
+
+                    navController.navigate(
+                        Screen.Detail.createRoute(
+                            recipeId
+                        )
+                    )
+
+                }
+            )
 
         }
 
@@ -47,9 +57,7 @@ fun RecipeNavGraph(navController: NavHostController, paddingValues: PaddingValue
                     ?.getString("recipeId")
                     ?: ""
 
-            RecipeDetailScreen(
-                recipeId = recipeId
-            )
+            RecipeDetailScreen()
 
         }
 
