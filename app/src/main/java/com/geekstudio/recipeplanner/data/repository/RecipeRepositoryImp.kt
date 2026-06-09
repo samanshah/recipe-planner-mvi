@@ -70,7 +70,7 @@ class RecipeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRecipeById(recipeId: String): Recipe? {
-        TODO("Not yet implemented")
+        return recipeDao.getRecipeById(recipeId)?.toDomain()
     }
 
 }
