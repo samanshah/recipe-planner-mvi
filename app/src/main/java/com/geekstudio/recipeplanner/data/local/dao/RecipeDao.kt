@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.geekstudio.recipeplanner.data.local.entity.FavoriteRecipeEntity
 import com.geekstudio.recipeplanner.data.local.entity.RecipeEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -36,12 +37,11 @@ interface RecipeDao {
     @Query(
         """
     SELECT *
-    FROM recipes
-    WHERE isFavorite = 1
+    FROM favorite_recipes
     ORDER BY title
     """
     )
-    fun observeFavorites(): Flow<List<RecipeEntity>>
+    fun observeFavorites(): Flow<List<FavoriteRecipeEntity>>
 
     @Query(
         """

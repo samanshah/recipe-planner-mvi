@@ -21,4 +21,16 @@ interface RecipeRepository {
 
     fun observeFavorites(): Flow<List<Recipe>>
 
+    suspend fun addFavorite(
+        recipe: Recipe
+    )
+
+    suspend fun removeFavorite(
+        recipeId: String
+    )
+
+    suspend fun isFavorite(
+        recipeId: String
+    ): Boolean
+
 }

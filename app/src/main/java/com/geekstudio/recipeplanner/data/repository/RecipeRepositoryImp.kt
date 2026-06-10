@@ -1,10 +1,12 @@
 package com.geekstudio.recipeplanner.data.repository
 
+import com.geekstudio.recipeplanner.data.local.dao.FavoriteDao
 import com.geekstudio.recipeplanner.data.local.dao.RecipeDao
 import com.geekstudio.recipeplanner.data.local.dao.SearchHistoryDao
 import com.geekstudio.recipeplanner.data.local.entity.SearchHistoryEntity
 import com.geekstudio.recipeplanner.data.local.mapper.toDomain
 import com.geekstudio.recipeplanner.data.local.mapper.toEntity
+import com.geekstudio.recipeplanner.data.local.mapper.toFavoriteEntity
 import com.geekstudio.recipeplanner.data.remote.api.RecipeApi
 import com.geekstudio.recipeplanner.data.remote.mapper.toDomain
 import com.geekstudio.recipeplanner.domain.model.Recipe
@@ -16,7 +18,8 @@ import javax.inject.Inject
 class RecipeRepositoryImpl @Inject constructor(
     private val api: RecipeApi,
     private val recipeDao: RecipeDao,
-    private val searchHistoryDao: SearchHistoryDao
+    private val searchHistoryDao: SearchHistoryDao,
+    private val favoriteDao: FavoriteDao
 ) : RecipeRepository {
 
     override fun observeRecipes(): Flow<List<Recipe>> {
@@ -75,7 +78,7 @@ class RecipeRepositoryImpl @Inject constructor(
 
     override fun observeFavorites(): Flow<List<Recipe>> {
 
-        return recipeDao
+        return favoriteDao
             .observeFavorites()
             .map { entities ->
 
@@ -84,6 +87,34 @@ class RecipeRepositoryImpl @Inject constructor(
                 }
 
             }
+
+    }
+
+    override suspend fun addFavorite(
+        recipe: Recipe
+    ) {
+
+        favoriteDao.addFavorite(
+            recipe.toFavoriteEntity()
+        )
+
+    }
+
+    override suspend fun removeFavorite(
+        recipeId: String
+    ) {
+
+        favoriteDao.removeFavorite(recipeId)
+
+    }
+
+    override suspend fun isFavorite(
+        recipeId: String
+    ): Boolean {
+
+        return favoriteDao.isFavorite(
+            recipeId
+        )
 
     }
 

@@ -3,6 +3,7 @@ package com.geekstudio.recipeplanner.di
 import kotlin.jvm.java
 import android.content.Context
 import androidx.room.Room
+import com.geekstudio.recipeplanner.data.local.dao.FavoriteDao
 import com.geekstudio.recipeplanner.data.local.dao.RecipeDao
 import com.geekstudio.recipeplanner.data.local.dao.SearchHistoryDao
 import com.geekstudio.recipeplanner.data.local.database.AppDatabase
@@ -51,6 +52,14 @@ object DatabaseModule {
 
         return database.searchHistoryDao()
 
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteDao(
+        database: AppDatabase
+    ): FavoriteDao {
+        return database.favoriteDao()
     }
 
 }

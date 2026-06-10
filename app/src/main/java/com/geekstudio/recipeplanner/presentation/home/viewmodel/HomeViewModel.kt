@@ -104,11 +104,11 @@ class HomeViewModel @Inject constructor(
 
             repository.observeRecipes().collectLatest { recipes ->
 
-                    reduce(
-                        HomePartialState.RecipesLoaded(recipes)
-                    )
+                reduce(
+                    HomePartialState.RecipesLoaded(recipes)
+                )
 
-                }
+            }
 
         }
 
@@ -223,8 +223,37 @@ class HomeViewModel @Inject constructor(
     private fun toggleFavorite(
         recipeId: String
     ) {
+
         viewModelScope.launch {
+
             repository.toggleFavorite(recipeId)
+
+            val recipe = state.value.recipes.find {
+                it.id == recipeId
+            } ?: return@launch
+
+            val isFavorite = repository.isFavorite(
+                recipeId
+            )
+
+            if (isFavorite) {
+
+                repository.removeFavorite(
+                    recipeId
+                )
+
+            } else {
+
+                repository.addFavorite(
+                    recipe
+                )
+
+            }
+
+            repository.toggleFavorite(
+                recipeId
+            )
+
         }
 
     }
