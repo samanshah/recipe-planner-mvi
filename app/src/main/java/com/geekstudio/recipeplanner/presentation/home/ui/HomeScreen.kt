@@ -209,7 +209,7 @@ fun HomeScreen(
                                 Spacer(modifier = Modifier.height(AppSpacing.Medium))
 
                                 RecipeCard(
-                                    recipe,
+                                    recipe = recipe,
                                     onClick = {
                                         viewModel.onIntent(
                                             HomeIntent.RecipeClicked(

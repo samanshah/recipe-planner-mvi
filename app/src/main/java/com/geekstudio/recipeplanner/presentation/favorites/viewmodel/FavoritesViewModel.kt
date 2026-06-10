@@ -2,11 +2,11 @@ package com.geekstudio.recipeplanner.presentation.favorites.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.geekstudio.recipeplanner.domain.model.Recipe
 import com.geekstudio.recipeplanner.domain.repository.RecipeRepository
 import com.geekstudio.recipeplanner.presentation.favorites.contract.FavoritesEffect
 import com.geekstudio.recipeplanner.presentation.favorites.contract.FavoritesIntent
 import com.geekstudio.recipeplanner.presentation.favorites.contract.FavoritesState
-import com.geekstudio.recipeplanner.presentation.home.contract.HomeEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +21,8 @@ import javax.inject.Inject
 class FavoritesViewModel @Inject constructor(
     private val repository: RecipeRepository
 ) : ViewModel() {
+
+    private var lastRemovedRecipe: Recipe? = null
 
     private val _state = MutableStateFlow(
         FavoritesState()
@@ -40,9 +42,7 @@ class FavoritesViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            repository
-                .observeFavorites()
-                .collectLatest { recipes ->
+            repository.observeFavorites().collectLatest { recipes ->
 
                     _state.update {
 
@@ -60,7 +60,7 @@ class FavoritesViewModel @Inject constructor(
 
     fun onIntent(favoritesIntent: FavoritesIntent) {
 
-        when(favoritesIntent) {
+        when (favoritesIntent) {
             is FavoritesIntent.RecipeClicked -> {
                 viewModelScope.launch {
                     _effect.send(
@@ -70,14 +70,60 @@ class FavoritesViewModel @Inject constructor(
                     )
                 }
             }
+
             is FavoritesIntent.RemoveFavorite -> {
-//                viewModelScope.launch {
-//                    repository.toggleFavorite(favoritesIntent.recipeId)
-//                }
+
+                removeFavorite(
+                    favoritesIntent.recipeId
+                )
+
             }
+
             is FavoritesIntent.LoadFavorites -> {
 
             }
+        }
+
+    }
+
+    private fun removeFavorite(
+        recipeId: String
+    ) {
+
+        viewModelScope.launch {
+
+            val recipe = state.value.recipes.find {
+                it.id == recipeId
+            } ?: return@launch
+
+            lastRemovedRecipe = recipe
+
+            repository.removeFavorite(
+                recipeId
+            )
+
+            _effect.send(
+                FavoritesEffect.ShowUndoSnackbar(
+                    recipeId
+                )
+            )
+
+        }
+
+    }
+
+    fun undoRemoveFavorite() {
+
+        val recipe = lastRemovedRecipe ?: return
+
+        viewModelScope.launch {
+
+            repository.addFavorite(
+                recipe
+            )
+
+            lastRemovedRecipe = null
+
         }
 
     }

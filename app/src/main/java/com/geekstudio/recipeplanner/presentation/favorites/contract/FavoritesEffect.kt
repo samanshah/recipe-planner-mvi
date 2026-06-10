@@ -6,4 +6,8 @@ sealed interface FavoritesEffect {
         val recipeId: String
     ) : FavoritesEffect
 
+    data class ShowUndoSnackbar(
+        val recipeId: String
+    ) : FavoritesEffect
+
 }

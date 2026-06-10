@@ -34,11 +34,6 @@ class FakeRecipeRepository : RecipeRepository {
             )
     }
 
-    override suspend fun toggleFavorite(
-        recipeId: String
-    ) {
-    }
-
     override suspend fun getRecipeById(
         recipeId: String
     ): Recipe? {
@@ -50,5 +45,17 @@ class FakeRecipeRepository : RecipeRepository {
 
     override fun observeFavorites(): Flow<List<Recipe>> {
         return MutableStateFlow(emptyList())
+    }
+
+    override suspend fun addFavorite(recipe: Recipe) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeFavorite(recipeId: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun isFavorite(recipeId: String): Boolean {
+        TODO("Not yet implemented")
     }
 }

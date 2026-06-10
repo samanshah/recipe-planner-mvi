@@ -74,15 +74,6 @@ class RecipeRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun toggleFavorite(
-        recipeId: String
-    ) {
-
-//        recipeDao.toggleFavorite(recipeId)
-
-    }
-
-
     override suspend fun getRecipeById(
         recipeId: String
     ): Recipe? {

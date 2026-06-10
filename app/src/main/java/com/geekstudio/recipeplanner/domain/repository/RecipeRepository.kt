@@ -11,10 +11,6 @@ interface RecipeRepository {
         query: String
     )
 
-    suspend fun toggleFavorite(
-        recipeId: String
-    )
-
     suspend fun getRecipeById(
         recipeId: String
     ): Recipe?

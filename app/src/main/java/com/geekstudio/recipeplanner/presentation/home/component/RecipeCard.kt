@@ -22,13 +22,14 @@ import com.geekstudio.recipeplanner.domain.model.Recipe
 
 @Composable
 fun RecipeCard(
+    modifier: Modifier = Modifier,
     recipe: Recipe,
     onFavoriteClick: () -> Unit,
     onClick: () -> Unit
 ) {
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable {
                 onClick()
