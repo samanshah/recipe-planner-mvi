@@ -248,9 +248,9 @@ class HomeViewModel @Inject constructor(
 
             }
 
-            repository.toggleFavorite(
-                recipeId
-            )
+//            repository.toggleFavorite(
+//                recipeId
+//            )
 
         }
 

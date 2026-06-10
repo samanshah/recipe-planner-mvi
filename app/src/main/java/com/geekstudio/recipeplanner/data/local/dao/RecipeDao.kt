@@ -55,10 +55,10 @@ interface RecipeDao {
         recipeId: String
     ): RecipeEntity?
 
-    @Query("""
-        UPDATE recipes
-        SET isFavorite = NOT isFavorite
-        WHERE id = :recipeId
-    """)
-    suspend fun toggleFavorite(recipeId: String)
+//    @Query("""
+//        UPDATE recipes
+//        SET isFavorite = NOT isFavorite
+//        WHERE id = :recipeId
+//    """)
+//    suspend fun toggleFavorite(recipeId: String)
 }

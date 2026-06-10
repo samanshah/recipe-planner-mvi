@@ -16,6 +16,4 @@ data class RecipeEntity(
     val category: String,
 
     val instructions: String,
-
-    val isFavorite: Boolean
 )

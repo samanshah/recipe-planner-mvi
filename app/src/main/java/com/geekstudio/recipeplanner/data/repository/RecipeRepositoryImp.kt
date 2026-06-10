@@ -12,6 +12,7 @@ import com.geekstudio.recipeplanner.data.remote.mapper.toDomain
 import com.geekstudio.recipeplanner.domain.model.Recipe
 import com.geekstudio.recipeplanner.domain.repository.RecipeRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -23,16 +24,21 @@ class RecipeRepositoryImpl @Inject constructor(
 ) : RecipeRepository {
 
     override fun observeRecipes(): Flow<List<Recipe>> {
-        return recipeDao
-            .observeRecipes()
-            .map { entities ->
+        return combine(
+            recipeDao.observeRecipes(), favoriteDao.observeFavorites()
+        ) { recipes, favorites ->
 
-                entities.map {
-                    it.toDomain()
-                }
+            val favoriteIds = favorites.map { it.id }.toSet()
+
+            recipes.map {
+
+                it.toDomain(
+                    isFavorite = it.id in favoriteIds
+                )
 
             }
 
+        }
     }
 
     override suspend fun refreshRecipes(
@@ -44,8 +50,7 @@ class RecipeRepositoryImpl @Inject constructor(
         val recipes = api.searchRecipes(query).meals?.map { dto ->
 
             dto.toDomain().copy(
-                isFavorite =
-                    dto.id in favoriteIds
+                isFavorite = dto.id in favoriteIds
             )
 
         } ?: emptyList()
@@ -73,10 +78,9 @@ class RecipeRepositoryImpl @Inject constructor(
         recipeId: String
     ) {
 
-        recipeDao.toggleFavorite(recipeId)
+//        recipeDao.toggleFavorite(recipeId)
 
     }
-
 
 
     override suspend fun getRecipeById(
@@ -84,10 +88,8 @@ class RecipeRepositoryImpl @Inject constructor(
     ): Recipe? {
 
         val recipe =
-            recipeDao
-                .getRecipeById(recipeId)
-                ?.toDomain()
-                ?: return null
+            recipeDao.getRecipeById(recipeId)?.toDomain() ?: favoriteDao.getRecipeById(recipeId)
+                ?.toDomain() ?: return null
 
         return recipe.copy(
             isFavorite = favoriteDao.isFavorite(recipeId)
@@ -97,9 +99,7 @@ class RecipeRepositoryImpl @Inject constructor(
 
     override fun observeFavorites(): Flow<List<Recipe>> {
 
-        return favoriteDao
-            .observeFavorites()
-            .map { entities ->
+        return favoriteDao.observeFavorites().map { entities ->
 
                 entities.map {
                     it.toDomain()

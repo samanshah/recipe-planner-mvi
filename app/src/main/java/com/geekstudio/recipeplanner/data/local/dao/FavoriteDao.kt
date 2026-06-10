@@ -55,4 +55,15 @@ interface FavoriteDao {
     """
     )
     suspend fun getFavoriteIds(): List<String>
+
+    @Query(
+        """
+    SELECT *
+    FROM favorite_recipes
+    WHERE id = :recipeId
+    """
+    )
+    suspend fun getRecipeById(
+        recipeId: String
+    ): FavoriteRecipeEntity?
 }

@@ -71,9 +71,9 @@ class FavoritesViewModel @Inject constructor(
                 }
             }
             is FavoritesIntent.RemoveFavorite -> {
-                viewModelScope.launch {
-                    repository.toggleFavorite(favoritesIntent.recipeId)
-                }
+//                viewModelScope.launch {
+//                    repository.toggleFavorite(favoritesIntent.recipeId)
+//                }
             }
             is FavoritesIntent.LoadFavorites -> {
 
