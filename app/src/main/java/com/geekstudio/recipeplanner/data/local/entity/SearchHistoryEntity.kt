@@ -7,11 +7,9 @@ import java.sql.Timestamp
 @Entity(tableName = "search_history")
 data class SearchHistoryEntity(
 
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-
+    @PrimaryKey
     val queryStr: String,
 
-    val timestamp: String
+    val timestamp: Long = System.currentTimeMillis()
 
 )

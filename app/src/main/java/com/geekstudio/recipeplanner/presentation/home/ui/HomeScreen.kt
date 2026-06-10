@@ -1,6 +1,10 @@
 package com.geekstudio.recipeplanner.presentation.home.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -149,14 +153,14 @@ fun HomeScreen(
                 }
             )
 
-            if (
-                state.searchQuery.isBlank() &&
-                state.searchHistory.isNotEmpty()
+            AnimatedVisibility(
+                visible = state.searchQuery.isBlank() && state.searchHistory.isNotEmpty(),
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkHorizontally()
             ) {
 
                 SearchHistorySection(
                     history = state.searchHistory,
-
                     onItemClick = {
 
                         viewModel.onIntent(
@@ -180,7 +184,6 @@ fun HomeScreen(
                         )
 
                     }
-
                 )
 
             }

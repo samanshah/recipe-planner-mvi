@@ -15,7 +15,7 @@ import com.geekstudio.recipeplanner.data.local.entity.SearchHistoryEntity
         SearchHistoryEntity::class,
         FavoriteRecipeEntity::class
     ],
-    version = 6,
+    version = 9,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

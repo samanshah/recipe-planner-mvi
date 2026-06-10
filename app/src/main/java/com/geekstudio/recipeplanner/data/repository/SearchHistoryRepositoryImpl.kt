@@ -14,7 +14,7 @@ class SearchHistoryRepositoryImpl @Inject constructor(
 
         return dao.observeSearchHistory()
             .map { items ->
-                items.map { it.query }
+                items.map { it.queryStr }
             }
 
     }

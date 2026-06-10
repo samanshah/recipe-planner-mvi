@@ -12,11 +12,11 @@ interface SearchHistoryDao {
 
     @Query(
         """
-        SELECT *
-FROM search_history
-ORDER BY timestamp DESC
-LIMIT 10
-        """
+    SELECT *
+    FROM search_history
+    ORDER BY timestamp DESC
+    LIMIT 10
+    """
     )
     fun observeSearchHistory(): Flow<List<SearchHistoryEntity>>
 

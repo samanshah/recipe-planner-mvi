@@ -66,7 +66,8 @@ class RecipeRepositoryImpl @Inject constructor(
 
             searchHistoryDao.insertSearchQuery(
                 SearchHistoryEntity(
-                    queryStr = query
+                    queryStr = query.trim(),
+                    timestamp = System.currentTimeMillis()
                 )
             )
 
