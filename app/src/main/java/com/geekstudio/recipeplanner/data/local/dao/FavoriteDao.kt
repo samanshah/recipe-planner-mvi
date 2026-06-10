@@ -47,4 +47,12 @@ interface FavoriteDao {
     suspend fun isFavorite(
         recipeId: String
     ): Boolean
+
+    @Query(
+        """
+    SELECT id
+    FROM favorite_recipes
+    """
+    )
+    suspend fun getFavoriteIds(): List<String>
 }

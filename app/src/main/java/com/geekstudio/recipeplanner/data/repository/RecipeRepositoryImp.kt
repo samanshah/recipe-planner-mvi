@@ -39,11 +39,16 @@ class RecipeRepositoryImpl @Inject constructor(
         query: String
     ) {
 
+        val favoriteIds = favoriteDao.getFavoriteIds()
+
         val recipes = api.searchRecipes(query).meals?.map { dto ->
 
-                dto.toDomain()
+            dto.toDomain().copy(
+                isFavorite =
+                    dto.id in favoriteIds
+            )
 
-            } ?: emptyList()
+        } ?: emptyList()
 
         recipeDao.clearRecipes()
 

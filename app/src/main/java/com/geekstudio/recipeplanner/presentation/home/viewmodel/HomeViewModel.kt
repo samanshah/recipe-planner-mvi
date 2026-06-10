@@ -226,8 +226,6 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            repository.toggleFavorite(recipeId)
-
             val recipe = state.value.recipes.find {
                 it.id == recipeId
             } ?: return@launch
