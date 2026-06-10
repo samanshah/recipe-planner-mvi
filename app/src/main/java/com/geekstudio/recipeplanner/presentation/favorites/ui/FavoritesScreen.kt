@@ -1,10 +1,13 @@
 package com.geekstudio.recipeplanner.presentation.favorites.ui
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -21,7 +24,12 @@ fun FavoritesScreen(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LazyColumn {
+    val listState = rememberLazyListState()
+
+    LazyColumn(
+        state = listState,
+        contentPadding = PaddingValues(bottom = 96.dp)
+    ) {
 
         items(
             state.recipes

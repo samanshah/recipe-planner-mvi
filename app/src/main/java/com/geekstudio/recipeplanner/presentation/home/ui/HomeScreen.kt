@@ -2,7 +2,10 @@ package com.geekstudio.recipeplanner.presentation.home.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -29,6 +33,7 @@ import com.geekstudio.recipeplanner.core.ui.components.EmptyState
 import com.geekstudio.recipeplanner.core.ui.components.ErrorView
 import com.geekstudio.recipeplanner.core.ui.components.SearchHintView
 import com.geekstudio.recipeplanner.core.ui.loading.RecipeSkeleton
+import com.geekstudio.recipeplanner.core.ui.spacing.AppSpacing
 import com.geekstudio.recipeplanner.navigation.Screen
 import com.geekstudio.recipeplanner.presentation.home.component.RecipeCard
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeEffect
@@ -107,7 +112,8 @@ fun HomeScreen(
     Scaffold(
         snackbarHost = {
             SnackbarHost(snackbarHostState)
-        }
+        },
+        modifier = Modifier.padding(AppSpacing.Medium)
     ) { paddingValues ->
 
         Column(
@@ -193,9 +199,14 @@ fun HomeScreen(
 
                         }
                     ) {
-                        LazyColumn {
+                        LazyColumn(
+                            state = listState,
+                            contentPadding = PaddingValues(bottom = 96.dp)
+                        ) {
 
                             items(state.recipes) { recipe ->
+
+                                Spacer(modifier = Modifier.height(AppSpacing.Medium))
 
                                 RecipeCard(
                                     recipe,
