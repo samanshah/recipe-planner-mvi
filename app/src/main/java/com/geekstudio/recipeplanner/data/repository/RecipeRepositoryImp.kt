@@ -77,8 +77,22 @@ class RecipeRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun getRecipeById(recipeId: String): Recipe? {
-        return recipeDao.getRecipeById(recipeId)?.toDomain()
+
+
+    override suspend fun getRecipeById(
+        recipeId: String
+    ): Recipe? {
+
+        val recipe =
+            recipeDao
+                .getRecipeById(recipeId)
+                ?.toDomain()
+                ?: return null
+
+        return recipe.copy(
+            isFavorite = favoriteDao.isFavorite(recipeId)
+        )
+
     }
 
     override fun observeFavorites(): Flow<List<Recipe>> {

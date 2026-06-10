@@ -76,9 +76,25 @@ class DetailViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            repository.toggleFavorite(
-                recipeId
+            val recipe = state.value.recipe ?: return@launch
+
+            val isFavorite = repository.isFavorite(
+                recipe.id
             )
+
+            if (isFavorite) {
+
+                repository.removeFavorite(
+                    recipe.id
+                )
+
+            } else {
+
+                repository.addFavorite(
+                    recipe
+                )
+
+            }
 
             loadRecipe()
 
