@@ -10,8 +10,8 @@ fun RecipeDto.toDomain(): Recipe {
         id = id,
         title = title,
         imageUrl = imageUrl,
-        category = "",
-        instructions = "",
+        category = category,
+        instructions = instructions,
         isFavorite = false
     )
 

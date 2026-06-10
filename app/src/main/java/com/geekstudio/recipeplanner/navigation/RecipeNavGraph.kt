@@ -52,12 +52,20 @@ fun RecipeNavGraph(navController: NavHostController, paddingValues: PaddingValue
             route = Screen.Detail.route
         ) { backStackEntry ->
 
-            val recipeId =
-                backStackEntry.arguments
-                    ?.getString("recipeId")
-                    ?: ""
+//            val recipeId =
+//                backStackEntry.arguments
+//                    ?.getString("recipeId")
+//                    ?: ""
 
-            RecipeDetailScreen()
+            RecipeDetailScreen(
+
+                onBackClick = {
+
+                    navController.popBackStack()
+
+                }
+
+            )
 
         }
 

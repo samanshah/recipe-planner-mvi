@@ -15,4 +15,10 @@ data class RecipeDto(
     @SerialName("strMealThumb")
     val imageUrl: String,
 
+    @SerialName("strCategory")
+    val category: String,
+
+    @SerialName("strInstructions")
+    val instructions: String,
+
 )
