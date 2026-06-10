@@ -18,4 +18,13 @@ sealed interface HomeIntent {
 
     data object Retry : HomeIntent
 
+    data class HistoryClicked(
+        val query: String
+    ) : HomeIntent
+
+    data class DeleteHistory(
+        val query: String
+    ) : HomeIntent
+
+    data object ClearHistory : HomeIntent
 }

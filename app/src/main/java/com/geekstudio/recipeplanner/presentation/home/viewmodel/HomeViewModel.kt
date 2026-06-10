@@ -3,6 +3,7 @@ package com.geekstudio.recipeplanner.presentation.home.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geekstudio.recipeplanner.domain.repository.RecipeRepository
+import com.geekstudio.recipeplanner.domain.repository.SearchHistoryRepository
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeEffect
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeIntent
 import com.geekstudio.recipeplanner.presentation.home.contract.HomePartialState
@@ -23,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: RecipeRepository,
+    private val searchHistoryRepository: SearchHistoryRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
@@ -38,6 +40,7 @@ class HomeViewModel @Inject constructor(
     init {
         observeSearch()
         observeRecipes()
+        observeHistory()
     }
 
     fun onIntent(
@@ -91,6 +94,40 @@ class HomeViewModel @Inject constructor(
                 searchRecipes(
                     _state.value.lastQuery
                 )
+
+            }
+
+            is HomeIntent.HistoryClicked -> {
+
+                searchQuery.value = intent.query
+
+                reduce(
+                    HomePartialState.QueryChanged(
+                        intent.query
+                    )
+                )
+
+            }
+
+            is HomeIntent.DeleteHistory -> {
+
+                viewModelScope.launch {
+
+                    searchHistoryRepository.deleteQuery(
+                        intent.query
+                    )
+
+                }
+
+            }
+
+            HomeIntent.ClearHistory -> {
+
+                viewModelScope.launch {
+
+                    searchHistoryRepository.clearHistory()
+
+                }
 
             }
 
@@ -251,6 +288,28 @@ class HomeViewModel @Inject constructor(
 //            repository.toggleFavorite(
 //                recipeId
 //            )
+
+        }
+
+    }
+
+    private fun observeHistory() {
+
+        viewModelScope.launch {
+
+            searchHistoryRepository
+                .observeHistory()
+                .collectLatest { history ->
+
+                    _state.update {
+
+                        it.copy(
+                            searchHistory = history
+                        )
+
+                    }
+
+                }
 
         }
 

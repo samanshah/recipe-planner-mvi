@@ -20,6 +20,8 @@ data class HomeState(
 
     val showSearchHint: Boolean = true,
 
-    val hasSearched: Boolean = false
+    val hasSearched: Boolean = false,
+
+    val searchHistory: List<String> = emptyList()
 
 )

@@ -66,7 +66,7 @@ class RecipeRepositoryImpl @Inject constructor(
 
             searchHistoryDao.insertSearchQuery(
                 SearchHistoryEntity(
-                    query = query
+                    queryStr = query
                 )
             )
 

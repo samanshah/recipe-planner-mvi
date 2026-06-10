@@ -36,6 +36,7 @@ import com.geekstudio.recipeplanner.core.ui.loading.RecipeSkeleton
 import com.geekstudio.recipeplanner.core.ui.spacing.AppSpacing
 import com.geekstudio.recipeplanner.navigation.Screen
 import com.geekstudio.recipeplanner.presentation.home.component.RecipeCard
+import com.geekstudio.recipeplanner.presentation.home.component.SearchHistorySection
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeEffect
 import com.geekstudio.recipeplanner.presentation.home.contract.HomeIntent
 import com.geekstudio.recipeplanner.presentation.home.viewmodel.HomeViewModel
@@ -147,6 +148,42 @@ fun HomeScreen(
                     Text("Search")
                 }
             )
+
+            if (
+                state.searchQuery.isBlank() &&
+                state.searchHistory.isNotEmpty()
+            ) {
+
+                SearchHistorySection(
+                    history = state.searchHistory,
+
+                    onItemClick = {
+
+                        viewModel.onIntent(
+                            HomeIntent.HistoryClicked(it)
+                        )
+
+                    },
+
+                    onDeleteClick = {
+
+                        viewModel.onIntent(
+                            HomeIntent.DeleteHistory(it)
+                        )
+
+                    },
+
+                    onClearAll = {
+
+                        viewModel.onIntent(
+                            HomeIntent.ClearHistory
+                        )
+
+                    }
+
+                )
+
+            }
 
             when {
                 state.isLoading -> {
